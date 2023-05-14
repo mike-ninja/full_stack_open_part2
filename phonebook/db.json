@@ -1,0 +1,24 @@
+{
+  "contacts": [
+    {
+      "name": "Carl Marx",
+      "number": "04578347332"
+    },
+    {
+      "name": "Mike Edubas",
+      "number": "04578334234"
+    },
+    {
+      "name": "Anastasia Romanova",
+      "number": "04578369694"
+    },
+    {
+      "name": "Mila Valintina",
+      "number": "04578332342"
+    },
+    {
+      "name": "Otin Putin",
+      "number": "04578342342"
+    }
+  ]
+}
