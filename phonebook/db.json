@@ -1,24 +1,19 @@
 {
   "contacts": [
     {
-      "name": "Carl Marx",
-      "number": "04578347332"
-    },
-    {
       "name": "Mike Edubas",
-      "number": "04578334234"
+      "number": "0457 834 3234",
+      "id": 4
     },
     {
-      "name": "Anastasia Romanova",
-      "number": "04578369694"
+      "name": "Mike",
+      "number": "322342432",
+      "id": 5
     },
     {
-      "name": "Mila Valintina",
-      "number": "04578332342"
-    },
-    {
-      "name": "Otin Putin",
-      "number": "04578342342"
+      "name": "Edubas Carlo",
+      "number": "0232 23423",
+      "id": 6
     }
   ]
 }

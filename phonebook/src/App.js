@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
-import Numbers from './components/Numbers'
+
+import Contact from './components/Contact'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import contactService from './services/contacts'
 
 function App() {
   const [contacts, setContact] = useState([])
@@ -12,28 +13,42 @@ function App() {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/contacts')
-      .then(response => {
-        console.log(response.data)
-        setContact(response.data)
+    contactService
+      .getAll()
+      .then(initialContacts => {
+        setContact(initialContacts)
       })
   }, [])
 
-  const addContact = (event) => {
+  const addContact = (event) => { 
     event.preventDefault()
-    console.log(newName, "Duplicate: ", contacts.map(item => item.name).includes(newName))
-    if (!contacts.map(item => item.name).includes(newName)) {
+    const index = contacts.map(item => item.name).indexOf(newName)
+    if (index === -1) {
       const newContact = {
         name: newName,
         number: newNumber,
       }
-      setContact(contacts.concat(newContact))
-      setNewName('')
-      setNewNumber('')
+      contactService
+        .create(newContact)
+        .then(updatedContacts => {
+          setContact(contacts.concat(updatedContacts))
+        })
     } else {
-      alert(`${newName} is already a contact!`)
+      const msg = `${newName} is already in the phonebook, replace the old number with a new one?`
+      if (window.confirm(msg) === true) {
+        const updatedContact = { ...contacts[index], number: newNumber }
+
+        console.log(updatedContact)
+        contactService
+          .update(updatedContact.id, updatedContact)
+          .then(contactUpdated => {
+            setContact(contacts.map(contact => contact.id !== updatedContact.id ? contact : updatedContact))
+            console.log(contactUpdated)
+          })
+      }
     }
+    setNewName('')
+    setNewNumber('')
   }
 
   const handleNewName = (event) => {
@@ -48,14 +63,35 @@ function App() {
     setFilter(event.target.value)
   }
 
-  const filteredShow = contacts.filter(contact => contact.name.indexOf(filter) !== -1)
+  const removeContact = (contact) => {
+    const id = contact.id
+    if (window.confirm(`Delete ${contact.name}?`) === true) {
+       contactService
+        .remove(contact.id)
+        .then(responseData => {
+          setContact(contacts.filter(contact => 
+            contact.id !== id
+          ))
+        })
+    }
+  }
 
+  const filteredShow = contacts.filter(contact => contact.name.indexOf(filter) !== -1)
   return (
     <div>
       <h2>Phonebook</h2>
       <Filter filter={filter} eventHandler={setFilterInput} />
       <PersonForm newName={newName} newNumber={newNumber} handleNewName={handleNewName} handleNewNumber={handleNewNumber} addContact={addContact}/>
-      <Numbers contacts={filteredShow}/>
+      <h2>Contacts</h2>
+      <ul>
+        {filteredShow.map(contact => 
+          <Contact
+            key={contact.id}
+            contact={contact}
+            toggleDelete={() => removeContact(contact)}
+          />
+        )}
+      </ul>
     </div>
   );
 }
