@@ -1,19 +1,14 @@
 {
   "contacts": [
     {
-      "name": "Mike Edubas",
-      "number": "0457 834 3234",
-      "id": 4
-    },
-    {
-      "name": "Mike",
-      "number": "322342432",
-      "id": 5
-    },
-    {
       "name": "Edubas Carlo",
-      "number": "0232 23423",
+      "number": "696969696",
       "id": 6
+    },
+    {
+      "name": "Anastasiaa Carlos",
+      "number": "2342 32423 42342",
+      "id": 9
     }
   ]
 }
