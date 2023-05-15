@@ -8,7 +8,7 @@ import Error from './components/Error'
 import contactService from './services/contacts'
 
 function App() {
-  const [contacts, setContact] = useState([])
+  const [contacts, setContact] = useState(null)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
@@ -90,26 +90,30 @@ function App() {
     }
   }
 
-  const filteredShow = contacts.filter(contact => contact.name.indexOf(filter) !== -1)
-  return (
-    <div>
-      <h2>Phonebook</h2>
-      <Notification message={notificationMessage}/>
-      <Error message={errorMessage}/>
-      <Filter filter={filter} eventHandler={setFilterInput} />
-      <PersonForm newName={newName} newNumber={newNumber} handleNewName={handleNewName} handleNewNumber={handleNewNumber} addContact={addContact}/>
-      <h2>Contacts</h2>
-      <ul>
-        {filteredShow.map(contact => 
-          <Contact
-            key={contact.id}
-            contact={contact}
-            toggleDelete={() => removeContact(contact)}
-          />
-        )}
-      </ul>
-    </div>
-  );
+  if (!contacts) {
+    return null
+  } else {
+    const filteredShow = contacts.filter(contact => contact.name.indexOf(filter) !== -1)
+    return (
+      <div>
+        <h2>Phonebook</h2>
+        <Notification message={notificationMessage}/>
+        <Error message={errorMessage}/>
+        <Filter filter={filter} eventHandler={setFilterInput} />
+        <PersonForm newName={newName} newNumber={newNumber} handleNewName={handleNewName} handleNewNumber={handleNewNumber} addContact={addContact}/>
+        <h2>Contacts</h2>
+        <ul>
+          {filteredShow.map(contact => 
+            <Contact
+              key={contact.id}
+              contact={contact}
+              toggleDelete={() => removeContact(contact)}
+            />
+          )}
+        </ul>
+      </div>
+    )
+  }
 }
 
 export default App;
