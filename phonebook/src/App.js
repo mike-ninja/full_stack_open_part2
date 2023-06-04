@@ -16,7 +16,6 @@ function App() {
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
-    console.log('effect')
     contactService
       .getAll()
       .then(initialContacts => {
@@ -32,14 +31,20 @@ function App() {
         name: newName,
         number: newNumber,
       }
-      setNotificationMessage(`Added ${newContact.name}`)
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 3000)
       contactService
         .create(newContact)
         .then(updatedContacts => {
+          setNotificationMessage(`Added ${newContact.name}`)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 3000)
           setContact(contacts.concat(updatedContacts))
+        })
+        .catch(error => {
+          setErrorMessage(error.response.data.error)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 3000)
         })
     } else {
       const msg = `${newName} is already in the phonebook, replace the old number with a new one?`
